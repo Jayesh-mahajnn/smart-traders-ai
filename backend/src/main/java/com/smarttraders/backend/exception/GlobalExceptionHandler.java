@@ -7,7 +7,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -64,4 +63,19 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+public ResponseEntity<ErrorResponse> handleInvalidCredentials(
+        InvalidCredentialsException ex, HttpServletRequest request) {
+
+    ErrorResponse errorResponse = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.UNAUTHORIZED.value(),
+            HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+    );
+
+    return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+}
 }

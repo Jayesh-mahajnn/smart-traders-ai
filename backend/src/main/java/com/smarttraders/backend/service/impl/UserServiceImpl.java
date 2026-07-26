@@ -1,9 +1,11 @@
 package com.smarttraders.backend.service.impl;
 
+import com.smarttraders.backend.dto.request.LoginRequest;
 import com.smarttraders.backend.dto.request.UserRegisterRequest;
 import com.smarttraders.backend.dto.response.UserResponse;
 import com.smarttraders.backend.entity.User;
 import com.smarttraders.backend.exception.DuplicateEmailException;
+import com.smarttraders.backend.exception.InvalidCredentialsException;
 import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,18 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    @Override
+    public UserResponse login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(InvalidCredentialsException::new);
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException();
+        }
+
+        return mapToResponse(user);
     }
 
     private UserResponse mapToResponse(User user) {
