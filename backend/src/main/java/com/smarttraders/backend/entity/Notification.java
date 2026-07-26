@@ -9,36 +9,26 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "crops")
+@Table(name = "notifications")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Crop {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String cropName;
-
-    @Column(nullable = false)
-    private Double quantity;
-
-    @Column(nullable = false)
-    private String unit;
-
-    @Column(nullable = false)
-    private Double pricePerUnit;
-
-    private String description;
-
-    private String imageUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "farmer_id", nullable = false)
-    private User farmer;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(nullable = false)
+    private String message;
+
+    @Column(nullable = false)
+    private boolean isRead = false;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

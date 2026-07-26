@@ -16,6 +16,7 @@ import com.smarttraders.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.smarttraders.backend.dto.request.UpdateProfileRequest;
 
 import java.util.List;
 
@@ -96,6 +97,24 @@ public List<NearbyTraderResponse> getNearbyTraders(Double latitude, Double longi
             ((Number) row[8]).doubleValue(),     // longitude
             ((Number) row[row.length - 1]).doubleValue() // distance (last column)
     )).toList();
+}
+
+@Override
+public UserResponse getMyProfile(String email) {
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    return mapToResponse(user);
+}
+
+@Override
+public UserResponse updateProfile(UpdateProfileRequest request, String email) {
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+
+    user.setFullName(request.getFullName());
+    user.setPhoneNumber(request.getPhoneNumber());
+
+    return mapToResponse(userRepository.save(user));
 }
 
     private UserResponse mapToResponse(User user) {

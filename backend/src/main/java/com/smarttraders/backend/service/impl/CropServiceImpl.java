@@ -9,8 +9,12 @@ import com.smarttraders.backend.exception.UnauthorizedActionException;
 import com.smarttraders.backend.repository.CropRepository;
 import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.service.CropService;
+import com.smarttraders.backend.service.FileStorageService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.smarttraders.backend.repository.spec.CropSpecification;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -105,6 +109,23 @@ public List<CropResponse> searchCrops(String cropName, Double minPrice, Double m
             .map(this::mapToResponse)
             .toList();
 } 
+
+private final FileStorageService fileStorageService; // add to fields
+
+@Override
+public CropResponse uploadImage(Long cropId, MultipartFile file, String farmerEmail) {
+    Crop crop = cropRepository.findById(cropId)
+            .orElseThrow(() -> new ResourceNotFoundException("Crop not found with id: " + cropId));
+
+    if (!crop.getFarmer().getEmail().equals(farmerEmail)) {
+        throw new UnauthorizedActionException("You can only update your own crops");
+    }
+
+    String imageUrl = fileStorageService.storeFile(file);
+    crop.setImageUrl(imageUrl);
+
+    return mapToResponse(cropRepository.save(crop));
+}
 
     private CropResponse mapToResponse(Crop crop) {
         return new CropResponse(
