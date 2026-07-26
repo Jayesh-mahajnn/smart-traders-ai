@@ -2,11 +2,13 @@ package com.smarttraders.backend.service.impl;
 
 import com.smarttraders.backend.dto.request.LoginRequest;
 import com.smarttraders.backend.dto.request.UserRegisterRequest;
+import com.smarttraders.backend.dto.response.LoginResponse;
 import com.smarttraders.backend.dto.response.UserResponse;
 import com.smarttraders.backend.entity.User;
 import com.smarttraders.backend.exception.DuplicateEmailException;
 import com.smarttraders.backend.exception.InvalidCredentialsException;
 import com.smarttraders.backend.repository.UserRepository;
+import com.smarttraders.backend.security.JwtUtil;
 import com.smarttraders.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public UserResponse createUser(UserRegisterRequest request) {
@@ -47,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(InvalidCredentialsException::new);
 
@@ -55,7 +58,15 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException();
         }
 
-        return mapToResponse(user);
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+
+        return new LoginResponse(
+                token,
+                user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 
     private UserResponse mapToResponse(User user) {

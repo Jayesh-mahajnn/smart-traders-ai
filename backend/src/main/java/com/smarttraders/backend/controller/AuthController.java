@@ -2,6 +2,7 @@ package com.smarttraders.backend.controller;
 
 import com.smarttraders.backend.dto.request.LoginRequest;
 import com.smarttraders.backend.dto.request.UserRegisterRequest;
+import com.smarttraders.backend.dto.response.LoginResponse;
 import com.smarttraders.backend.dto.response.UserResponse;
 import com.smarttraders.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -23,9 +24,9 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest request) {
-        UserResponse response = userService.login(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+   @PostMapping("/login")
+public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    LoginResponse response = userService.login(request);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+}
 }
