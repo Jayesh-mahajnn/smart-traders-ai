@@ -1,10 +1,16 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './features/auth/Login';
+import Register from './features/auth/Register';
+
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50">
-      <h1 className="text-3xl font-bold text-green-800">
-        Smart Traders AI
-      </h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
