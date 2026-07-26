@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -50,6 +52,16 @@ public ResponseEntity<List<CropResponse>> searchCrops(
         @RequestParam(required = false) Double minPrice,
         @RequestParam(required = false) Double maxPrice) {
     return new ResponseEntity<>(cropService.searchCrops(cropName, minPrice, maxPrice), HttpStatus.OK);
+}
+
+@GetMapping("/search/paginated")
+public ResponseEntity<Page<CropResponse>> searchCropsPaginated(
+        @RequestParam(required = false) String cropName,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice,
+        Pageable pageable) {
+    return new ResponseEntity<>(
+            cropService.searchCropsPaginated(cropName, minPrice, maxPrice, pageable), HttpStatus.OK);
 }
 
     @PutMapping("/{id}")

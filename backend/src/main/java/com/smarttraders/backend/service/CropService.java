@@ -2,6 +2,8 @@ package com.smarttraders.backend.service;
 
 import com.smarttraders.backend.dto.request.CropRequest;
 import com.smarttraders.backend.dto.response.CropResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,5 +16,6 @@ public interface CropService {
     List<CropResponse> searchCrops(String cropName, Double minPrice, Double maxPrice);
     CropResponse updateCrop(Long cropId, CropRequest request, String farmerEmail);
     CropResponse uploadImage(Long cropId, MultipartFile file, String farmerEmail);
+    Page<CropResponse> searchCropsPaginated(String cropName, Double minPrice, Double maxPrice, Pageable pageable);
     void deleteCrop(Long cropId, String farmerEmail);
 }

@@ -10,6 +10,8 @@ import com.smarttraders.backend.repository.CropRepository;
 import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.service.CropService;
 import com.smarttraders.backend.service.FileStorageService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -125,6 +127,16 @@ public CropResponse uploadImage(Long cropId, MultipartFile file, String farmerEm
     crop.setImageUrl(imageUrl);
 
     return mapToResponse(cropRepository.save(crop));
+}
+
+@Override
+public Page<CropResponse> searchCropsPaginated(String cropName, Double minPrice, Double maxPrice, Pageable pageable) {
+    Specification<Crop> spec = Specification
+            .where(CropSpecification.hasCropName(cropName))
+            .and(CropSpecification.hasMinPrice(minPrice))
+            .and(CropSpecification.hasMaxPrice(maxPrice));
+
+    return cropRepository.findAll(spec, pageable).map(this::mapToResponse);
 }
 
     private CropResponse mapToResponse(Crop crop) {
