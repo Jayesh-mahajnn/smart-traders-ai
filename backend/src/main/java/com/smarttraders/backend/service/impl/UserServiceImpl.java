@@ -1,5 +1,7 @@
 package com.smarttraders.backend.service.impl;
 
+import com.smarttraders.backend.dto.request.UserRegisterRequest;
+import com.smarttraders.backend.dto.response.UserResponse;
 import com.smarttraders.backend.entity.User;
 import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.service.UserService;
@@ -15,12 +17,34 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserResponse createUser(UserRegisterRequest request) {
+        User user = new User();
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setRole(request.getRole());
+
+        User savedUser = userRepository.save(user);
+        return mapToResponse(savedUser);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    private UserResponse mapToResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getRole(),
+                user.getCreatedAt()
+        );
     }
 }

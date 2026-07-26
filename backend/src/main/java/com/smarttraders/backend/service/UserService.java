@@ -1,10 +1,11 @@
 package com.smarttraders.backend.service;
 
-import com.smarttraders.backend.entity.User;
+import com.smarttraders.backend.dto.request.UserRegisterRequest;
+import com.smarttraders.backend.dto.response.UserResponse;
 
 import java.util.List;
 
 public interface UserService {
-    User createUser(User user);
-    List<User> getAllUsers();
+    UserResponse createUser(UserRegisterRequest request);
+    List<UserResponse> getAllUsers();
 }
