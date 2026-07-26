@@ -78,4 +78,34 @@ public ResponseEntity<ErrorResponse> handleInvalidCredentials(
 
     return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+public ResponseEntity<ErrorResponse> handleResourceNotFound(
+        ResourceNotFoundException ex, HttpServletRequest request) {
+
+    ErrorResponse errorResponse = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+    );
+
+    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+}
+
+@ExceptionHandler(UnauthorizedActionException.class)
+public ResponseEntity<ErrorResponse> handleUnauthorizedAction(
+        UnauthorizedActionException ex, HttpServletRequest request) {
+
+    ErrorResponse errorResponse = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.FORBIDDEN.value(),
+            HttpStatus.FORBIDDEN.getReasonPhrase(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+    );
+
+    return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+}
 }

@@ -23,7 +23,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+ @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
@@ -33,6 +33,9 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.POST, "/api/crops").hasRole("FARMER")
+            .requestMatchers(HttpMethod.PUT, "/api/crops/**").hasRole("FARMER")
+            .requestMatchers(HttpMethod.DELETE, "/api/crops/**").hasRole("FARMER")
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
