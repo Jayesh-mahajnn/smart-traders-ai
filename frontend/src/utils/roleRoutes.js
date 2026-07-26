@@ -1,0 +1,1 @@
+export const roleRoutes = { FARMER: '/farmer', TRADER: '/trader', VENDOR: '/vendor', ADMIN: '/admin' };

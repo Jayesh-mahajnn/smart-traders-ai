@@ -32,3 +32,5 @@ frontend/dist/
 .vscode/
 .idea/
 *.log
+
+frontend/.env

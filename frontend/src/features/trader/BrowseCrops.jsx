@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { searchCropsPaginated } from '../../api/cropApi';
 import { createTransaction } from '../../api/transactionApi';
+import { getImageUrl } from '../../utils/imageUrl';
 
 function BrowseCrops() {
   const [crops, setCrops] = useState([]);
@@ -63,7 +64,7 @@ function BrowseCrops() {
         {crops.map((crop) => (
           <div key={crop.id} className="bg-white rounded-lg shadow-md p-4">
             {crop.imageUrl && (
-              <img src={`http://localhost:8080${crop.imageUrl}`} alt={crop.cropName}
+              <img src={getImageUrl(crop.imageUrl)} alt={crop.cropName}
                 className="w-full h-32 object-cover rounded mb-2" />
             )}
             <h3 className="font-bold">{crop.cropName}</h3>

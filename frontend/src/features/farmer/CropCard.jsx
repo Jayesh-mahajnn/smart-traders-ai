@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { uploadCropImage } from '../../api/cropApi';
+import { getImageUrl } from '../../utils/imageUrl';
 
 function CropCard({ crop, onEdit, onDelete, onImageUploaded }) {
   const [uploading, setUploading] = useState(false);
@@ -21,7 +22,7 @@ function CropCard({ crop, onEdit, onDelete, onImageUploaded }) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       {crop.imageUrl ? (
-        <img src={`http://localhost:8080${crop.imageUrl}`} alt={crop.cropName} className="w-full h-40 object-cover" />
+        <img src={getImageUrl(crop.imageUrl)} alt={crop.cropName} className="w-full h-40 object-cover" />
       ) : (
         <div className="w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400">No Image</div>
       )}
