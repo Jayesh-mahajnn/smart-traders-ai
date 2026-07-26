@@ -11,6 +11,8 @@ import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.service.CropService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.smarttraders.backend.repository.spec.CropSpecification;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class CropServiceImpl implements CropService {
         Crop savedCrop = cropRepository.save(crop);
         return mapToResponse(savedCrop);
     }
+    
 
     @Override
     public List<CropResponse> getMyCrops(String farmerEmail) {
@@ -89,6 +92,19 @@ public class CropServiceImpl implements CropService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
+
+     @Override
+public List<CropResponse> searchCrops(String cropName, Double minPrice, Double maxPrice) {
+    Specification<Crop> spec = Specification
+            .where(CropSpecification.hasCropName(cropName))
+            .and(CropSpecification.hasMinPrice(minPrice))
+            .and(CropSpecification.hasMaxPrice(maxPrice));
+
+    return cropRepository.findAll(spec)
+            .stream()
+            .map(this::mapToResponse)
+            .toList();
+} 
 
     private CropResponse mapToResponse(Crop crop) {
         return new CropResponse(

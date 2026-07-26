@@ -9,6 +9,7 @@ public interface CropService {
     CropResponse createCrop(CropRequest request, String farmerEmail);
     List<CropResponse> getMyCrops(String farmerEmail);
     List<CropResponse> getAllCrops();
+    List<CropResponse> searchCrops(String cropName, Double minPrice, Double maxPrice);
     CropResponse updateCrop(Long cropId, CropRequest request, String farmerEmail);
     void deleteCrop(Long cropId, String farmerEmail);
 }

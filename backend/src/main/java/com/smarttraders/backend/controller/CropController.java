@@ -36,6 +36,14 @@ public class CropController {
         return new ResponseEntity<>(cropService.getAllCrops(), HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+public ResponseEntity<List<CropResponse>> searchCrops(
+        @RequestParam(required = false) String cropName,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice) {
+    return new ResponseEntity<>(cropService.searchCrops(cropName, minPrice, maxPrice), HttpStatus.OK);
+}
+
     @PutMapping("/{id}")
     public ResponseEntity<CropResponse> updateCrop(
             @PathVariable Long id, @Valid @RequestBody CropRequest request, Authentication authentication) {
