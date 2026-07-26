@@ -6,6 +6,7 @@ import FarmerDashboard from './features/farmer/FarmerDashboard';
 import TraderDashboard from './features/trader/TraderDashboard';
 import VendorDashboard from './features/vendor/VendorDashboard';
 import AdminDashboard from './features/admin/AdminDashboard';
+import ProfilePage from './features/profile/ProfilePage';
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
           <ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>
         } />
       </Routes>
+      <Route path="/profile" element={
+  <ProtectedRoute><ProfilePage /></ProtectedRoute>
+} />
     </BrowserRouter>
   );
 }
