@@ -40,6 +40,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers(HttpMethod.POST, "/api/vendor-listings").hasRole("VENDOR")
             .requestMatchers(HttpMethod.PUT, "/api/vendor-listings/**").hasRole("VENDOR")
             .requestMatchers(HttpMethod.DELETE, "/api/vendor-listings/**").hasRole("VENDOR")
+            .requestMatchers(HttpMethod.PUT, "/api/users/location").authenticated()
+            .requestMatchers(HttpMethod.GET, "/api/users/nearby-traders").authenticated() 
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

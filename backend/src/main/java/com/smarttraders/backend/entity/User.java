@@ -38,6 +38,10 @@ public class User {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private Double latitude;
+
+    private Double longitude;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

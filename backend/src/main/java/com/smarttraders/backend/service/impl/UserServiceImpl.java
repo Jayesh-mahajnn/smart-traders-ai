@@ -1,12 +1,15 @@
 package com.smarttraders.backend.service.impl;
 
 import com.smarttraders.backend.dto.request.LoginRequest;
+import com.smarttraders.backend.dto.request.UpdateLocationRequest;
 import com.smarttraders.backend.dto.request.UserRegisterRequest;
 import com.smarttraders.backend.dto.response.LoginResponse;
+import com.smarttraders.backend.dto.response.NearbyTraderResponse;
 import com.smarttraders.backend.dto.response.UserResponse;
 import com.smarttraders.backend.entity.User;
 import com.smarttraders.backend.exception.DuplicateEmailException;
 import com.smarttraders.backend.exception.InvalidCredentialsException;
+import com.smarttraders.backend.exception.ResourceNotFoundException;
 import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.security.JwtUtil;
 import com.smarttraders.backend.service.UserService;
@@ -68,6 +71,32 @@ public class UserServiceImpl implements UserService {
                 user.getRole()
         );
     }
+
+    @Override
+public UserResponse updateLocation(UpdateLocationRequest request, String email) {
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+
+    user.setLatitude(request.getLatitude());
+    user.setLongitude(request.getLongitude());
+
+    User updatedUser = userRepository.save(user);
+    return mapToResponse(updatedUser);
+}
+
+@Override
+public List<NearbyTraderResponse> getNearbyTraders(Double latitude, Double longitude, Double radiusKm) {
+    List<Object[]> results = userRepository.findNearbyTraders(latitude, longitude, radiusKm);
+
+    return results.stream().map(row -> new NearbyTraderResponse(
+            ((Number) row[0]).longValue(),      // id
+            (String) row[2],                     // full_name
+            (String) row[5],                     // phone_number
+            ((Number) row[7]).doubleValue(),     // latitude
+            ((Number) row[8]).doubleValue(),     // longitude
+            ((Number) row[row.length - 1]).doubleValue() // distance (last column)
+    )).toList();
+}
 
     private UserResponse mapToResponse(User user) {
         return new UserResponse(
