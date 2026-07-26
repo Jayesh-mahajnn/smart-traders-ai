@@ -7,6 +7,7 @@ import com.smarttraders.backend.repository.UserRepository;
 import com.smarttraders.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.smarttraders.backend.exception.DuplicateEmailException;
 
 import java.util.List;
 
@@ -17,17 +18,21 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserResponse createUser(UserRegisterRequest request) {
-        User user = new User();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(request.getRole());
-
-        User savedUser = userRepository.save(user);
-        return mapToResponse(savedUser);
+   public UserResponse createUser(UserRegisterRequest request) {
+    if (userRepository.existsByEmail(request.getEmail())) {
+        throw new DuplicateEmailException(request.getEmail());
     }
+
+    User user = new User();
+    user.setFullName(request.getFullName());
+    user.setEmail(request.getEmail());
+    user.setPassword(request.getPassword());
+    user.setPhoneNumber(request.getPhoneNumber());
+    user.setRole(request.getRole());
+
+    User savedUser = userRepository.save(user);
+    return mapToResponse(savedUser);
+}
 
     @Override
     public List<UserResponse> getAllUsers() {
