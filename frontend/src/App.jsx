@@ -9,8 +9,12 @@ import AdminDashboard from './features/admin/AdminDashboard';
 import ProfilePage from './features/profile/ProfilePage';
 import CropDetail from './pages/CropDetail';
 import NotFound from './pages/NotFound';
+import ChatWidget from './components/ChatWidget';
+import { useAuth } from './context/AuthContext';
 
 function App() {
+  const { user } = useAuth();
+
   return (
     <BrowserRouter>
       <Routes>
@@ -39,6 +43,8 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {user && <ChatWidget />}
     </BrowserRouter>
   );
 }
