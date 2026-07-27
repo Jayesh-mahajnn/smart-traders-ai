@@ -1,7 +1,12 @@
 package com.smarttraders.backend.controller;
 
+import com.smarttraders.backend.ai.ChatMemoryManager;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,9 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class LangChainTestController {
 
     private final ChatLanguageModel chatLanguageModel;
+    private final ChatMemoryManager chatMemoryManager;
 
     @GetMapping("/api/langchain-test")
-    public String testLangChain(@RequestParam(defaultValue = "Say hello in one sentence") String prompt) {
-        return chatLanguageModel.generate(prompt);
+    public String testLangChain(@RequestParam String prompt, Authentication authentication) {
+        ChatMemory memory = chatMemoryManager.getMemoryForUser(authentication.getName());
+
+        memory.add(UserMessage.from(prompt));
+
+        AiMessage aiResponse = chatLanguageModel.generate(memory.messages()).content();
+        memory.add(aiResponse);
+
+        return aiResponse.text();
     }
 }

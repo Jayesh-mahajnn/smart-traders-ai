@@ -68,6 +68,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/api/transactions/*/status").hasRole("FARMER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/notifications/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/ai-test").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/langchain-test").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
