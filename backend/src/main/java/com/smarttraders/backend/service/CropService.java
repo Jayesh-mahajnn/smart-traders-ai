@@ -18,4 +18,5 @@ public interface CropService {
     CropResponse uploadImage(Long cropId, MultipartFile file, String farmerEmail);
     Page<CropResponse> searchCropsPaginated(String cropName, Double minPrice, Double maxPrice, Pageable pageable);
     void deleteCrop(Long cropId, String farmerEmail);
+    CropResponse getCropById(Long cropId);
 }

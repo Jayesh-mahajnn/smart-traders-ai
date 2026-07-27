@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class CropResponse {
+
     private Long id;
     private String cropName;
     private Double quantity;
@@ -15,5 +16,6 @@ public class CropResponse {
     private Double pricePerUnit;
     private String description;
     private String farmerName;
+    private String imageUrl;      // Add this
     private LocalDateTime createdAt;
 }

@@ -28,6 +28,7 @@ public class CropServiceImpl implements CropService {
 
     private final CropRepository cropRepository;
     private final UserRepository userRepository;
+    
 
     @Override
     public CropResponse createCrop(CropRequest request, String farmerEmail) {
@@ -138,17 +139,25 @@ public Page<CropResponse> searchCropsPaginated(String cropName, Double minPrice,
 
     return cropRepository.findAll(spec, pageable).map(this::mapToResponse);
 }
+@Override
+public CropResponse getCropById(Long cropId) {
+    Crop crop = cropRepository.findById(cropId)
+            .orElseThrow(() -> new ResourceNotFoundException("Crop not found with id: " + cropId));
+    return mapToResponse(crop);
+}
+
 
     private CropResponse mapToResponse(Crop crop) {
-        return new CropResponse(
-                crop.getId(),
-                crop.getCropName(),
-                crop.getQuantity(),
-                crop.getUnit(),
-                crop.getPricePerUnit(),
-                crop.getDescription(),
-                crop.getFarmer().getFullName(),
-                crop.getCreatedAt()
-        );
-    }
+    return new CropResponse(
+            crop.getId(),
+            crop.getCropName(),
+            crop.getQuantity(),
+            crop.getUnit(),
+            crop.getPricePerUnit(),
+            crop.getDescription(),
+            crop.getFarmer().getFullName(),
+            crop.getImageUrl(),
+            crop.getCreatedAt()
+    );
+}
 }

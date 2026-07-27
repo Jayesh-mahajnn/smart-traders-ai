@@ -63,6 +63,10 @@ public ResponseEntity<Page<CropResponse>> searchCropsPaginated(
     return new ResponseEntity<>(
             cropService.searchCropsPaginated(cropName, minPrice, maxPrice, pageable), HttpStatus.OK);
 }
+@GetMapping("/{id}")
+public ResponseEntity<CropResponse> getCropById(@PathVariable Long id) {
+    return new ResponseEntity<>(cropService.getCropById(id), HttpStatus.OK);
+}
 
     @PutMapping("/{id}")
     public ResponseEntity<CropResponse> updateCrop(
