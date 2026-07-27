@@ -2,7 +2,6 @@ package com.smarttraders.backend.controller;
 
 import com.smarttraders.backend.ai.ChatMemoryManager;
 import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +19,14 @@ public class LangChainTestController {
 
     @GetMapping("/api/langchain-test")
     public String testLangChain(@RequestParam String prompt, Authentication authentication) {
-        ChatMemory memory = chatMemoryManager.getMemoryForUser(authentication.getName());
+        String userEmail = authentication.getName();
 
-        memory.add(UserMessage.from(prompt));
+        chatMemoryManager.addUserMessage(userEmail, prompt);
 
+        ChatMemory memory = chatMemoryManager.getMemoryForUser(userEmail);
         AiMessage aiResponse = chatLanguageModel.generate(memory.messages()).content();
-        memory.add(aiResponse);
+
+        chatMemoryManager.addAiMessage(userEmail, aiResponse.text());
 
         return aiResponse.text();
     }
