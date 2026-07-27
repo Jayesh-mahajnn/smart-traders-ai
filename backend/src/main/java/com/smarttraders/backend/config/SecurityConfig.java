@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/notifications/**").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/ai-test").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/langchain-test").permitAll()
+                .requestMatchers("/api/chat/**").authenticated()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
