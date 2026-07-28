@@ -71,6 +71,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/ai-test").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/langchain-test").permitAll()
                 .requestMatchers("/api/chat/**").authenticated()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
