@@ -6,10 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "crops")
+@Table(name = "crops", indexes = {
+    @Index(name = "idx_crop_farmer_id", columnList = "farmer_id"),
+    @Index(name = "idx_crop_name", columnList = "cropName")
+})
 @Getter
 @Setter
 @NoArgsConstructor
