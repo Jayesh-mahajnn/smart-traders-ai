@@ -1,4 +1,12 @@
 # 🌾 Smart Traders AI
+![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.x-6DB33F?style=for-the-badge&logo=springboot)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql)
+![JWT](https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge&logo=jsonwebtokens)
+![LangChain4j](https://img.shields.io/badge/LangChain4j-AI-blue?style=for-the-badge)
+![Ollama](https://img.shields.io/badge/Ollama-LLM-green?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 > An AI-powered agricultural marketplace connecting **Farmers, Traders, Vendors, and Admins** through a secure full-stack web application with an intelligent AI assistant.
 
